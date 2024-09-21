@@ -1,0 +1,68 @@
+{
+    "name": "InputActions",
+    "maps": [
+        {
+            "name": "CastFishingRod",
+            "id": "a5537978-51dd-4572-9db1-00f5f57e00d4",
+            "actions": [
+                {
+                    "name": "Casting",
+                    "type": "Button",
+                    "id": "57d7ea39-f1d1-4281-8cb0-2c92f985c4ee",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "bdecd8b2-18fc-4b99-9116-411439225141",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "Hold",
+                    "processors": "",
+                    "groups": "Global",
+                    "action": "Casting",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Fishing",
+            "id": "d45506bc-4087-476d-8d63-0d1078823d42",
+            "actions": [
+                {
+                    "name": "Pull",
+                    "type": "Button",
+                    "id": "f990f0b8-33be-42dc-8c62-04530d8320dd",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "74afcf55-e0a3-4548-a76e-7e6edc3d78f8",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "Hold",
+                    "processors": "",
+                    "groups": "Global",
+                    "action": "Pull",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": [
+        {
+            "name": "Global",
+            "bindingGroup": "Global",
+            "devices": []
+        }
+    ]
+}
