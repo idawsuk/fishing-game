@@ -10,9 +10,11 @@ namespace FishingGame
         [SerializeField] private InputActions input;
         private InputAction casting;
         private InputAction fishing;
+        private InputAction mousePosition;
 
         public InputAction Casting => casting;
         public InputAction Fishing => fishing;
+        public Vector2 MousePosition => mousePosition.ReadValue<Vector2>();
 
         private void Awake()
         {
@@ -38,12 +40,16 @@ namespace FishingGame
 
             fishing = input.Fishing.Pull;
             fishing.Enable();
+
+            mousePosition = input.CastFishingRod.MousePosition;
+            mousePosition.Enable();
         }
 
         private void OnDisable()
         {
             casting.Disable();
             fishing.Disable();
+            mousePosition.Disable();
         }
     }
 }

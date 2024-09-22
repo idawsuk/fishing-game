@@ -35,6 +35,15 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MousePosition"",
+                    ""type"": ""Value"",
+                    ""id"": ""4db6fea6-da74-40d7-93c9-2fc08040252f"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -42,10 +51,21 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""bdecd8b2-18fc-4b99-9116-411439225141"",
                     ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": ""Hold"",
+                    ""interactions"": ""Hold(duration=0.2)"",
                     ""processors"": """",
                     ""groups"": ""Global"",
                     ""action"": ""Casting"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1003ddb4-700d-4392-a08e-53b334852a9e"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Global"",
+                    ""action"": ""MousePosition"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -91,6 +111,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         // CastFishingRod
         m_CastFishingRod = asset.FindActionMap("CastFishingRod", throwIfNotFound: true);
         m_CastFishingRod_Casting = m_CastFishingRod.FindAction("Casting", throwIfNotFound: true);
+        m_CastFishingRod_MousePosition = m_CastFishingRod.FindAction("MousePosition", throwIfNotFound: true);
         // Fishing
         m_Fishing = asset.FindActionMap("Fishing", throwIfNotFound: true);
         m_Fishing_Pull = m_Fishing.FindAction("Pull", throwIfNotFound: true);
@@ -156,11 +177,13 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_CastFishingRod;
     private List<ICastFishingRodActions> m_CastFishingRodActionsCallbackInterfaces = new List<ICastFishingRodActions>();
     private readonly InputAction m_CastFishingRod_Casting;
+    private readonly InputAction m_CastFishingRod_MousePosition;
     public struct CastFishingRodActions
     {
         private @InputActions m_Wrapper;
         public CastFishingRodActions(@InputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Casting => m_Wrapper.m_CastFishingRod_Casting;
+        public InputAction @MousePosition => m_Wrapper.m_CastFishingRod_MousePosition;
         public InputActionMap Get() { return m_Wrapper.m_CastFishingRod; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -173,6 +196,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @Casting.started += instance.OnCasting;
             @Casting.performed += instance.OnCasting;
             @Casting.canceled += instance.OnCasting;
+            @MousePosition.started += instance.OnMousePosition;
+            @MousePosition.performed += instance.OnMousePosition;
+            @MousePosition.canceled += instance.OnMousePosition;
         }
 
         private void UnregisterCallbacks(ICastFishingRodActions instance)
@@ -180,6 +206,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @Casting.started -= instance.OnCasting;
             @Casting.performed -= instance.OnCasting;
             @Casting.canceled -= instance.OnCasting;
+            @MousePosition.started -= instance.OnMousePosition;
+            @MousePosition.performed -= instance.OnMousePosition;
+            @MousePosition.canceled -= instance.OnMousePosition;
         }
 
         public void RemoveCallbacks(ICastFishingRodActions instance)
@@ -255,6 +284,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     public interface ICastFishingRodActions
     {
         void OnCasting(InputAction.CallbackContext context);
+        void OnMousePosition(InputAction.CallbackContext context);
     }
     public interface IFishingActions
     {

@@ -8,6 +8,7 @@ namespace FishingGame
 {
     public class CastFishingRodAction : BaseAction
     {
+        [SerializeField] private Camera mainCamera;
         [SerializeField] private PlayerInputs input;
         [SerializeField] private float maxDistance = 10f;
         [SerializeField] private Transform fishingRodTip;
@@ -17,6 +18,8 @@ namespace FishingGame
         [SerializeField] private Ease castEasing;
         [SerializeField] private AnimationCurve castCurve;
         [SerializeField] private float castDuration = 2f;
+        [SerializeField] private PlayerController playerController;
+        [SerializeField] private LayerMask worldMask;
 
         private float time = 0;
         private bool backCastStarted = false;
@@ -27,7 +30,10 @@ namespace FishingGame
 
         private void Awake()
         {
-            
+            if(mainCamera == null)
+            {
+                mainCamera = Camera.main;
+            }
         }
 
         // Start is called before the first frame update
@@ -66,6 +72,12 @@ namespace FishingGame
             backCastStarted = true;
             power = 0;
             powerTween = DOTween.To(() => power, x => power = x, 1, castInterval).SetLoops(-1, LoopType.Yoyo).SetEase(castEasing);
+
+            Ray ray = mainCamera.ScreenPointToRay(input.MousePosition);
+            if(Physics.Raycast(ray, out var hit, Mathf.Infinity, worldMask))
+            {
+                playerController.LookAt(hit.point);
+            }
         }
 
         private void Casting_started(InputAction.CallbackContext obj)
@@ -103,7 +115,7 @@ namespace FishingGame
         {
             time = 0;
             tackle.SetVisible(true);
-            tackleTargetPosition = this.transform.position + (power * maxDistance * Vector3.forward);
+            tackleTargetPosition = this.transform.position + (power * maxDistance * playerController.transform.forward);
             castStarted = true;
             tackle.Cast();
         }

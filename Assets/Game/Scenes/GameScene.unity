@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 165705610}
   - component: {fileID: 165705609}
   - component: {fileID: 165705612}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ground
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -306,6 +306,7 @@ GameObject:
   m_Component:
   - component: {fileID: 220930584}
   - component: {fileID: 220930585}
+  - component: {fileID: 220930586}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -346,6 +347,18 @@ MonoBehaviour:
   fishingAction: {fileID: 1011307547}
   tackle: {fileID: 781043811}
   currentState: 0
+--- !u!114 &220930586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 220930583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6decd9abbeb66e4ab788b5b0fa5a901, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &488530531
 GameObject:
   m_ObjectHideFlags: 0
@@ -949,13 +962,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: 0.24999999, y: -0.75000006, z: 0.43301275, w: 0.43301266}
+  m_LocalPosition: {x: 5.01, y: 9.56, z: 6.86}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 60, y: -120, z: 0}
 --- !u!1 &1011307544
 GameObject:
   m_ObjectHideFlags: 0
@@ -1001,6 +1014,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33a932552d88f3d4dbf76c8428c34969, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mainCamera: {fileID: 963194227}
   input: {fileID: 488530532}
   maxDistance: 10
   fishingRodTip: {fileID: 2071909278}
@@ -1042,6 +1056,10 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   castDuration: 1
+  playerController: {fileID: 220930586}
+  worldMask:
+    serializedVersion: 2
+    m_Bits: 80
 --- !u!114 &1011307547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1542,7 +1560,7 @@ GameObject:
   - component: {fileID: 1821042190}
   - component: {fileID: 1821042189}
   - component: {fileID: 1821042192}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: Water
   m_TagString: Water
   m_Icon: {fileID: 0}
