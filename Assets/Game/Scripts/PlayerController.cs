@@ -8,30 +8,76 @@ namespace FishingGame
     {
         [SerializeField] private Vector3 lookAtDirection;
         [SerializeField] private float turnRate = 3;
+        [SerializeField] private PlayerInputs inputs;
+        [SerializeField] private Camera mainCamera;
+        [SerializeField] private float moveSpeed;
+        [SerializeField] private Transform facingTransform;
+        [SerializeField] private Animator animator;
+        [SerializeField] private Rigidbody rb;
+
+        [SerializeField] private Vector3 movement;
         private bool lookAtTarget = false;
+        private bool canMove = true;
+
+        public bool CanMove
+        {
+            get
+            {
+                return canMove;
+            }
+            set
+            {
+                canMove = value;
+            }
+        }
 
         // Start is called before the first frame update
         void Start()
         {
-        
+            canMove = true;
         }
 
         // Update is called once per frame
         void Update()
         {
-            if(lookAtTarget)
+            if(canMove)
             {
-                Quaternion toRotation = Quaternion.FromToRotation(transform.forward, lookAtDirection);
-                transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, turnRate * Time.deltaTime);
+                MoveRelativeToCamera();
+                lookAtTarget = false;
+            }
+            else if(lookAtTarget)
+            {
+                Quaternion toRotation = Quaternion.FromToRotation(facingTransform.forward, lookAtDirection);
+                facingTransform.rotation = Quaternion.Lerp(facingTransform.rotation, toRotation, turnRate * Time.deltaTime);
             }
         }
 
         public void LookAt(Vector3 target)
         {
-            target.y = transform.position.y;
-            lookAtDirection = target - transform.position;
+            target.y = facingTransform.position.y;
+            lookAtDirection = target - facingTransform.position;
             lookAtTarget = true;
-            //transform.LookAt(target, Vector3.up);
+        }
+
+        private void MoveRelativeToCamera()
+        {
+            Vector3 forward = mainCamera.transform.forward;
+            Vector3 right = mainCamera.transform.right;
+            forward.y = 0;
+            right.y = 0;
+            forward = forward.normalized;
+            right = right.normalized;
+
+            movement = (forward * inputs.Movement.y) + (right * inputs.Movement.x);
+            this.transform.Translate(movement * moveSpeed * Time.deltaTime, Space.World);
+
+            if(inputs.Movement != Vector2.zero)
+            {
+                Quaternion toRotation = Quaternion.LookRotation(movement, Vector3.up);
+                facingTransform.rotation = Quaternion.Lerp(facingTransform.rotation, toRotation, turnRate * Time.deltaTime);
+            }
+
+            animator.SetFloat("velocity", movement.magnitude);
         }
     }
 }

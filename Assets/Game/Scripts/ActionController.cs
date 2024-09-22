@@ -10,6 +10,7 @@ namespace FishingGame
         [SerializeField] private FishingAction fishingAction;
         [SerializeField] private Tackle tackle;
         [SerializeField] private State currentState;
+        [SerializeField] private PlayerController playerController;
         private BaseAction currentAction;
 
         private enum State
@@ -23,8 +24,8 @@ namespace FishingGame
             ChangeAction(State.Casting);
             tackle.OnTouchWater += OnTackleTouchWater;
             tackle.OnTouchGround += OnTackleTouchGround;
-            tackle.OnFishCatch += OnFishCatch;
-            tackle.OnFishEscape += OnFishEscape;
+            fishingAction.OnFishingEnd += OnFishingEnd;
+            castingAction.OnBackCastingStarted += OnCastingStarted;
         }
 
         // Update is called once per frame
@@ -67,16 +68,23 @@ namespace FishingGame
             ChangeAction(State.Casting);
         }
 
-        private void OnFishCatch()
+        private void OnFishingEnd(Fish fish)
         {
-            Debug.Log("get fish");
+            if(fish != null)
+            {
+                //show fish
+            }
+
+            playerController.CanMove = true;
             ChangeAction(State.Casting);
         }
 
-        private void OnFishEscape()
+        private void OnCastingStarted(bool started)
         {
-            Debug.Log("fish escape");
-            ChangeAction(State.Casting);
+            if(started)
+            {
+                playerController.CanMove = false;
+            }
         }
     }
 }

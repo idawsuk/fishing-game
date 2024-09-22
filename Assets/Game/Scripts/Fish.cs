@@ -11,6 +11,7 @@ namespace FishingGame
         private float time = 0;
         private bool isBiting = false;
         private Tackle tackle;
+        private Vector3 lookAtPosition;
 
         public bool IsBiting => isBiting;
 
@@ -23,11 +24,13 @@ namespace FishingGame
         // Update is called once per frame
         void Update()
         {
-            if(tackle != null)
+            if(tackle != null && tackle.IsInWater)
             {
                 time += Time.deltaTime;
+                lookAtPosition = tackle.transform.position;
+                lookAtPosition.y = transform.position.y;
                 transform.position = Vector3.Lerp(transform.position, tackle.transform.position, Time.deltaTime);
-                transform.LookAt(tackle.transform, Vector3.up);
+                transform.LookAt(lookAtPosition, Vector3.up);
 
                 if(time >= biteDuration && time <= eatDuration)
                 {
@@ -77,7 +80,7 @@ namespace FishingGame
         {
             isBiting = false;
             tackle = null;
-            gameObject.SetActive(false);
+            //gameObject.SetActive(false);
         }
 
         public void Escape()

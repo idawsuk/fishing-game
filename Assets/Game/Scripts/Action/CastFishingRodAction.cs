@@ -23,12 +23,17 @@ namespace FishingGame
         [SerializeField] private Animator animator;
         [SerializeField] private FishingRodString fishingRodString;
 
+        public float Power => power;
+
         private float time = 0;
         private bool backCastStarted = false;
         private bool castStarted = false;
         private Vector3 tackleTargetPosition;
 
         private Tween powerTween;
+
+        public delegate void CastingEvent(bool isStarted);
+        public CastingEvent OnBackCastingStarted;
 
         private void Awake()
         {
@@ -73,6 +78,7 @@ namespace FishingGame
             }
 
             backCastStarted = true;
+            OnBackCastingStarted?.Invoke(backCastStarted);
             power = 0;
             powerTween = DOTween.To(() => power, x => power = x, 1, castInterval).SetLoops(-1, LoopType.Yoyo).SetEase(castEasing);
 
@@ -96,6 +102,7 @@ namespace FishingGame
             {
                 animator.SetTrigger("casting");
                 backCastStarted = false;
+                OnBackCastingStarted?.Invoke(backCastStarted);
                 powerTween.Kill();
             }
 

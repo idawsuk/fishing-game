@@ -17,12 +17,11 @@ namespace FishingGame
 
         public bool IsBaitAvailable => isBaitAvailable;
         public bool IsBitten => isBitten;
+        public bool IsInWater => isInWater;
 
         public delegate void TackleEvent();
         public TackleEvent OnTouchWater;
         public TackleEvent OnTouchGround;
-        public TackleEvent OnFishCatch;
-        public TackleEvent OnFishEscape;
 
         // Start is called before the first frame update
         void Start()
@@ -38,19 +37,20 @@ namespace FishingGame
 
         private void OnTriggerEnter(Collider other)
         {
-            if(other.tag == waterTag)
+            if(!isInWater)
             {
-                OnTouchWater?.Invoke();
-                isInWater = true;
+                if(other.tag == waterTag)
+                {
+                    OnTouchWater?.Invoke();
+                    isInWater = true;
+                } else if(other.tag == groundTag)
+                {
+                    OnTouchGround?.Invoke();
+                    isInWater = false;
+                }
+                playerAnimator.SetBool("tackleTouchWater", isInWater);
             }
 
-            if(other.tag == groundTag)
-            {
-                OnTouchGround?.Invoke();
-                isInWater = false;
-            }
-
-            playerAnimator.SetBool("tackleTouchWater", isInWater);
             Debug.Log($"touch {other.tag}");
         }
 
@@ -58,21 +58,23 @@ namespace FishingGame
         {
             isBaitAvailable = true;
             isBitten = false;
+            isInWater = false;
         }
 
-        public void PullTackle()
+        public Fish PullTackle()
         {
+            isInWater = false;
             if(fish != null && fish.IsBiting)
             {
                 fish.Pull();
-                OnFishCatch?.Invoke();
+                return fish;
             } else
             {
                 if(fish != null)
                 {
                     fish.Escape();
                 }
-                OnFishEscape?.Invoke();
+                return null;
             }
         }
 
