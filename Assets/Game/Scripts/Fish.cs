@@ -29,18 +29,19 @@ namespace FishingGame
                 time += Time.deltaTime;
                 lookAtPosition = tackle.transform.position;
                 lookAtPosition.y = transform.position.y;
-                transform.position = Vector3.Lerp(transform.position, tackle.transform.position, Time.deltaTime);
+                transform.position = Vector3.Lerp(transform.position, lookAtPosition, Time.deltaTime);
                 transform.LookAt(lookAtPosition, Vector3.up);
 
                 if(time >= biteDuration && time <= eatDuration)
                 {
                     isBiting = true;
+                    tackle.Eating();
                 } else
                 {
                     isBiting = false;
                     if(time > eatDuration)
                     {
-                        tackle.Eat();
+                        tackle.EatFinish();
                         tackle = null;
                     }
                 }

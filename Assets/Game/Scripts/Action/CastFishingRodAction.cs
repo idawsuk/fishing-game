@@ -126,7 +126,7 @@ namespace FishingGame
         {
             time = 0;
             tackle.SetVisible(true);
-            tackleTargetPosition = this.transform.position + (power * maxDistance * playerController.transform.forward);
+            tackleTargetPosition = this.transform.position + (power * maxDistance * playerController.FacingTransform.forward);
             castStarted = true;
             tackle.Cast();
             fishingRodString.enabled = true;

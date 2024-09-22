@@ -19,6 +19,8 @@ namespace FishingGame
         private bool lookAtTarget = false;
         private bool canMove = true;
 
+        public Transform FacingTransform => facingTransform;
+
         public bool CanMove
         {
             get
@@ -45,7 +47,7 @@ namespace FishingGame
                 MoveRelativeToCamera();
                 lookAtTarget = false;
             }
-            else if(lookAtTarget)
+            if(lookAtTarget)
             {
                 Quaternion toRotation = Quaternion.FromToRotation(facingTransform.forward, lookAtDirection);
                 facingTransform.rotation = Quaternion.Lerp(facingTransform.rotation, toRotation, turnRate * Time.deltaTime);

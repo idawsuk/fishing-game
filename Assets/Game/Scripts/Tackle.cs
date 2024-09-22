@@ -10,6 +10,8 @@ namespace FishingGame
         [SerializeField] private string groundTag;
         [SerializeField] private GameObject visual;
         [SerializeField] private Animator playerAnimator;
+        [SerializeField] private Animator tackleAnimator;
+        [SerializeField] private ParticleSystem splashParticle;
         private bool isInWater = false;
         private Fish fish;
         private bool isBaitAvailable = false;
@@ -43,6 +45,7 @@ namespace FishingGame
                 {
                     OnTouchWater?.Invoke();
                     isInWater = true;
+                    splashParticle.Play();
                 } else if(other.tag == groundTag)
                 {
                     OnTouchGround?.Invoke();
@@ -59,6 +62,7 @@ namespace FishingGame
             isBaitAvailable = true;
             isBitten = false;
             isInWater = false;
+            tackleAnimator.Play("idle");
         }
 
         public Fish PullTackle()
@@ -80,6 +84,7 @@ namespace FishingGame
 
         public void SetVisible(bool visible)
         {
+            splashParticle.Stop();
             visual.SetActive(visible);
         }
 
@@ -89,11 +94,17 @@ namespace FishingGame
             isBitten = true;
         }
 
-        public void Eat()
+        public void EatFinish()
         {
             this.fish = null;
             isBitten = false;
             isBaitAvailable = false;
+            tackleAnimator.Play("idle");
+        }
+
+        public void Eating()
+        {
+            tackleAnimator.Play("bit");
         }
     }
 }
