@@ -11,6 +11,11 @@ namespace FishingGame
         [SerializeField] private GameObject visual;
         private bool isInWater = false;
         private Fish fish;
+        private bool isBaitAvailable = false;
+        private bool isBitten = false;
+
+        public bool IsBaitAvailable => isBaitAvailable;
+        public bool IsBitten => isBitten;
 
         public delegate void TackleEvent();
         public TackleEvent OnTouchWater;
@@ -46,13 +51,24 @@ namespace FishingGame
             Debug.Log($"touch {other.tag}");
         }
 
+        public void Cast()
+        {
+            isBaitAvailable = true;
+            isBitten = false;
+        }
+
         public void PullTackle()
         {
             if(fish != null && fish.IsBiting)
             {
+                fish.Pull();
                 OnFishCatch?.Invoke();
             } else
             {
+                if(fish != null)
+                {
+                    fish.Escape();
+                }
                 OnFishEscape?.Invoke();
             }
         }
@@ -62,9 +78,17 @@ namespace FishingGame
             visual.SetActive(visible);
         }
 
-        public void SetBite(Fish fish)
+        public void Bite(Fish fish)
         {
             this.fish = fish;
+            isBitten = true;
+        }
+
+        public void Eat()
+        {
+            this.fish = null;
+            isBitten = false;
+            isBaitAvailable = false;
         }
     }
 }

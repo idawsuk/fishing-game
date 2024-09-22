@@ -105,6 +105,7 @@ namespace FishingGame
             tackle.SetVisible(true);
             tackleTargetPosition = this.transform.position + (power * maxDistance * Vector3.forward);
             castStarted = true;
+            tackle.Cast();
         }
     }
 }

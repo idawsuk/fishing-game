@@ -37,7 +37,8 @@ namespace FishingGame
                     isBiting = false;
                     if(time > eatDuration)
                     {
-                        tackle.SetBite(null);
+                        tackle.Eat();
+                        tackle = null;
                     }
                 }
             }
@@ -48,8 +49,15 @@ namespace FishingGame
             if(other.tag == "Tackle")
             {
                 time = 0;
-                tackle = other.GetComponent<Tackle>();
-                tackle.SetBite(this);
+                Tackle t = other.GetComponent<Tackle>();
+                if(t != null && t.IsBaitAvailable && !t.IsBitten)
+                {
+                    tackle = t;
+                    tackle.Bite(this);
+                } else
+                {
+                    tackle = null;
+                }
             }
         }
 
@@ -59,10 +67,23 @@ namespace FishingGame
             {
                 if(tackle != null)
                 {
-                    tackle.SetBite(null);
+                    tackle.Bite(null);
                     tackle = null;
                 }
             }
+        }
+
+        public void Pull()
+        {
+            isBiting = false;
+            tackle = null;
+            gameObject.SetActive(false);
+        }
+
+        public void Escape()
+        {
+            isBiting = false;
+            tackle = null;
         }
     }
 }
