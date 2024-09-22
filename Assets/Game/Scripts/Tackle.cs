@@ -9,6 +9,7 @@ namespace FishingGame
         [SerializeField] private string waterTag;
         [SerializeField] private string groundTag;
         [SerializeField] private GameObject visual;
+        [SerializeField] private Animator playerAnimator;
         private bool isInWater = false;
         private Fish fish;
         private bool isBaitAvailable = false;
@@ -46,8 +47,10 @@ namespace FishingGame
             if(other.tag == groundTag)
             {
                 OnTouchGround?.Invoke();
+                isInWater = false;
             }
 
+            playerAnimator.SetBool("tackleTouchWater", isInWater);
             Debug.Log($"touch {other.tag}");
         }
 

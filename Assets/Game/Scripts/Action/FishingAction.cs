@@ -8,6 +8,8 @@ namespace FishingGame
     {
         [SerializeField] private PlayerInputs input;
         [SerializeField] private Tackle tackle;
+        [SerializeField] private Animator animator;
+        [SerializeField] private FishingRodString fishingRodString;
 
         // Start is called before the first frame update
         void Start()
@@ -29,11 +31,15 @@ namespace FishingGame
         private void OnDisable()
         {
             input.Fishing.started -= Fishing_started;
+            //fishingRodString.enabled = false;
         }
 
         private void Fishing_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
+            animator.SetTrigger("reeling");
             tackle.PullTackle();
         }
+
+        
     }
 }

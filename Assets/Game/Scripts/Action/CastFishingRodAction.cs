@@ -20,6 +20,8 @@ namespace FishingGame
         [SerializeField] private float castDuration = 2f;
         [SerializeField] private PlayerController playerController;
         [SerializeField] private LayerMask worldMask;
+        [SerializeField] private Animator animator;
+        [SerializeField] private FishingRodString fishingRodString;
 
         private float time = 0;
         private bool backCastStarted = false;
@@ -46,6 +48,7 @@ namespace FishingGame
         {
             input.Casting.started += Casting_started;
             input.Casting.performed += Casting_performed;
+            fishingRodString.enabled = false;
         }
 
         private void OnDisable()
@@ -78,6 +81,7 @@ namespace FishingGame
             {
                 playerController.LookAt(hit.point);
             }
+            fishingRodString.enabled = false;
         }
 
         private void Casting_started(InputAction.CallbackContext obj)
@@ -90,7 +94,7 @@ namespace FishingGame
         {
             if(!input.Casting.IsPressed() && backCastStarted)
             {
-                Cast();
+                animator.SetTrigger("casting");
                 backCastStarted = false;
                 powerTween.Kill();
             }
@@ -118,6 +122,7 @@ namespace FishingGame
             tackleTargetPosition = this.transform.position + (power * maxDistance * playerController.transform.forward);
             castStarted = true;
             tackle.Cast();
+            fishingRodString.enabled = true;
         }
     }
 }
