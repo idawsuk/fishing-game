@@ -8,17 +8,26 @@ namespace FishingGame
     {
         [SerializeField] private float biteDuration = 3f;
         [SerializeField] private float eatDuration = 5f;
+        [SerializeField] private float moveInterval = 5f;
+        [SerializeField] private float moveSpeed = 3;
+        [SerializeField] private float turnRate = 2;
         private float time = 0;
         private bool isBiting = false;
+        private bool isPulled = false;
         private Tackle tackle;
         private Vector3 lookAtPosition;
+        private float moveTime = 0;
+        private FishGroup fishGroup;
+        private Vector3 moveTargetPos;
 
         public bool IsBiting => isBiting;
 
         // Start is called before the first frame update
         void Start()
         {
-            
+            fishGroup = GetComponentInParent<FishGroup>();
+            moveTargetPos = fishGroup.GetRandomPosition();
+            moveTargetPos.y = transform.position.y;
         }
 
         // Update is called once per frame
@@ -45,6 +54,20 @@ namespace FishingGame
                         tackle = null;
                     }
                 }
+            } else if(!isPulled)
+            {
+                moveTime += Time.deltaTime;
+                if(moveTime > moveInterval)
+                {
+                    moveTime = 0;
+                    moveTargetPos = fishGroup.GetRandomPosition();
+                    moveTargetPos.y = transform.position.y;
+                }
+
+                transform.position = Vector3.Lerp(transform.position, moveTargetPos, Time.deltaTime * moveSpeed);
+                //Quaternion toRotation = Quaternion.FromToRotation(transform.forward, moveTargetPos - transform.position);
+                Quaternion toRotation = Quaternion.LookRotation(moveTargetPos - transform.position, Vector3.up);
+                transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, turnRate * Time.deltaTime);
             }
         }
 
@@ -80,6 +103,7 @@ namespace FishingGame
         public void Pull()
         {
             isBiting = false;
+            isPulled = true;
             tackle = null;
             //gameObject.SetActive(false);
         }
