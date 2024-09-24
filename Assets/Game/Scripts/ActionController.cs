@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace FishingGame
@@ -36,12 +37,7 @@ namespace FishingGame
 
         private void ChangeAction(State state)
         {
-            //if(currentState != state)
-            //{
-                currentState = state;
-            //}
-
-            Debug.Log($"change state to {state}");
+            currentState = state;
 
             currentAction?.End();
 
@@ -74,6 +70,7 @@ namespace FishingGame
             if(fish != null)
             {
                 //show fish
+                Debug.Log("You got " + fish.DisplayName);
             }
 
             playerController.CanMove = true;

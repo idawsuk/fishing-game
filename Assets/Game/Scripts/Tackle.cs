@@ -56,8 +56,6 @@ namespace FishingGame
                 }
                 playerAnimator.SetBool("tackleTouchWater", isInWater);
             }
-
-            Debug.Log($"touch {other.tag}");
         }
 
         public void Cast()

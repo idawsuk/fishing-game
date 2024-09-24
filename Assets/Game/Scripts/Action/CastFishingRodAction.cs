@@ -107,8 +107,6 @@ namespace FishingGame
                 Ray ray = mainCamera.ScreenPointToRay(input.MousePosition);
                 if (Physics.Raycast(ray, out var hit, Mathf.Infinity, worldMask))
                 {
-                    Debug.Log(hit.collider.name, hit.collider.gameObject);
-                    Debug.Log(hit.point);
                     playerController.LookAt(hit.point);
                 }
             }

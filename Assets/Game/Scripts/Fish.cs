@@ -6,6 +6,7 @@ namespace FishingGame
 {
     public class Fish : MonoBehaviour
     {
+        [SerializeField] private string displayName;
         [SerializeField] private float biteDuration = 3f;
         [SerializeField] private float eatDuration = 5f;
         [SerializeField] private float moveInterval = 5f;
@@ -21,6 +22,7 @@ namespace FishingGame
         private Vector3 moveTargetPos;
 
         public bool IsBiting => isBiting;
+        public string DisplayName => displayName;
 
         // Start is called before the first frame update
         void Start()
