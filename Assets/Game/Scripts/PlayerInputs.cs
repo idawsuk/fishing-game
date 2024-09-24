@@ -12,9 +12,11 @@ namespace FishingGame
         private InputAction fishing;
         private InputAction mousePosition;
         private InputAction movement;
+        private InputAction running;
 
         public InputAction Casting => casting;
         public InputAction Fishing => fishing;
+        public InputAction Running => running;
         public Vector2 Movement => movement.ReadValue<Vector2>();
         public Vector2 MousePosition => mousePosition.ReadValue<Vector2>();
 
@@ -48,6 +50,9 @@ namespace FishingGame
 
             movement = input.Player.Movement;
             movement.Enable();
+
+            running = input.Player.Running;
+            running.Enable();
         }
 
         private void OnDisable()
@@ -56,6 +61,7 @@ namespace FishingGame
             fishing.Disable();
             mousePosition.Disable();
             movement.Disable();
+            running.Disable();
         }
     }
 }

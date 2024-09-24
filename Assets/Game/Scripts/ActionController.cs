@@ -65,6 +65,7 @@ namespace FishingGame
 
         private void OnTackleTouchGround()
         {
+            playerController.CanMove = true;
             ChangeAction(State.Casting);
         }
 

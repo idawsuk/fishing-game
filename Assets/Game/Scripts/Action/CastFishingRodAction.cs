@@ -82,11 +82,7 @@ namespace FishingGame
             power = 0;
             powerTween = DOTween.To(() => power, x => power = x, 1, castInterval).SetLoops(-1, LoopType.Yoyo).SetEase(castEasing);
 
-            Ray ray = mainCamera.ScreenPointToRay(input.MousePosition);
-            if(Physics.Raycast(ray, out var hit, Mathf.Infinity, worldMask))
-            {
-                playerController.LookAt(hit.point);
-            }
+            
             fishingRodString.enabled = false;
         }
 
@@ -104,6 +100,17 @@ namespace FishingGame
                 backCastStarted = false;
                 OnBackCastingStarted?.Invoke(backCastStarted);
                 powerTween.Kill();
+            }
+
+            if(input.Casting.IsPressed())
+            {
+                Ray ray = mainCamera.ScreenPointToRay(input.MousePosition);
+                if (Physics.Raycast(ray, out var hit, Mathf.Infinity, worldMask))
+                {
+                    Debug.Log(hit.collider.name, hit.collider.gameObject);
+                    Debug.Log(hit.point);
+                    playerController.LookAt(hit.point);
+                }
             }
 
             if(castStarted)

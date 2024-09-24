@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR;
 
 namespace FishingGame
 {
@@ -11,6 +12,7 @@ namespace FishingGame
         [SerializeField] private PlayerInputs inputs;
         [SerializeField] private Camera mainCamera;
         [SerializeField] private float moveSpeed;
+        [SerializeField] private float runSpeed;
         [SerializeField] private Transform facingTransform;
         [SerializeField] private Animator animator;
         [SerializeField] private Rigidbody rb;
@@ -18,6 +20,7 @@ namespace FishingGame
         [SerializeField] private Vector3 movement;
         private bool lookAtTarget = false;
         private bool canMove = true;
+        private bool isRunning = false;
 
         public Transform FacingTransform => facingTransform;
 
@@ -46,18 +49,21 @@ namespace FishingGame
             {
                 MoveRelativeToCamera();
                 lookAtTarget = false;
+                isRunning = inputs.Running.IsPressed();
+                animator.SetBool("running", isRunning);
             }
             if(lookAtTarget)
             {
                 Quaternion toRotation = Quaternion.FromToRotation(facingTransform.forward, lookAtDirection);
-                facingTransform.rotation = Quaternion.Lerp(facingTransform.rotation, toRotation, turnRate * Time.deltaTime);
+                //facingTransform.rotation = Quaternion.Lerp(facingTransform.rotation, toRotation, turnRate * Time.deltaTime);
+                facingTransform.LookAt(lookAtDirection);
             }
         }
 
         public void LookAt(Vector3 target)
         {
             target.y = facingTransform.position.y;
-            lookAtDirection = target - facingTransform.position;
+            lookAtDirection = target;
             lookAtTarget = true;
         }
 
@@ -71,7 +77,9 @@ namespace FishingGame
             right = right.normalized;
 
             movement = (forward * inputs.Movement.y) + (right * inputs.Movement.x);
-            this.transform.Translate(movement * moveSpeed * Time.deltaTime, Space.World);
+            float speed = moveSpeed;
+            if (isRunning) speed = runSpeed;
+            this.transform.Translate(movement * speed * Time.deltaTime, Space.World);
 
             if(inputs.Movement != Vector2.zero)
             {

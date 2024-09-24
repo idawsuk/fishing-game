@@ -16,6 +16,7 @@ namespace FishingGame
         private Fish fish;
         private bool isBaitAvailable = false;
         private bool isBitten = false;
+        private bool isTouchSomething = false;
 
         public bool IsBaitAvailable => isBaitAvailable;
         public bool IsBitten => isBitten;
@@ -39,16 +40,18 @@ namespace FishingGame
 
         private void OnTriggerEnter(Collider other)
         {
-            if(!isInWater)
+            if(!isInWater && !isTouchSomething)
             {
                 if(other.tag == waterTag)
                 {
                     OnTouchWater?.Invoke();
                     isInWater = true;
                     splashParticle.Play();
+                    isTouchSomething = true;
                 } else if(other.tag == groundTag)
                 {
                     OnTouchGround?.Invoke();
+                    isTouchSomething = true;
                     isInWater = false;
                 }
                 playerAnimator.SetBool("tackleTouchWater", isInWater);
@@ -61,6 +64,7 @@ namespace FishingGame
         {
             isBaitAvailable = true;
             isBitten = false;
+            isTouchSomething = false;
             isInWater = false;
             tackleAnimator.Play("idle");
         }
