@@ -37,7 +37,6 @@ namespace FishingGame
         private void OnDisable()
         {
             input.Fishing.started -= Fishing_started;
-            //fishingRodString.enabled = false;
         }
 
         private void Fishing_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)

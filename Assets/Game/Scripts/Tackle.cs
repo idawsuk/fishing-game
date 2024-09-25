@@ -17,10 +17,12 @@ namespace FishingGame
         private bool isBaitAvailable = false;
         private bool isBitten = false;
         private bool isTouchSomething = false;
+        private bool isInteractedWithFish = false;
 
         public bool IsBaitAvailable => isBaitAvailable;
         public bool IsBitten => isBitten;
         public bool IsInWater => isInWater;
+        public bool IsInteractedWithFish => isInteractedWithFish;
 
         public delegate void TackleEvent();
         public TackleEvent OnTouchWater;
@@ -64,6 +66,7 @@ namespace FishingGame
             isBitten = false;
             isTouchSomething = false;
             isInWater = false;
+            isInteractedWithFish = false;
             tackleAnimator.Play("idle");
         }
 
@@ -94,6 +97,7 @@ namespace FishingGame
         {
             this.fish = fish;
             isBitten = true;
+            isInteractedWithFish = true;
         }
 
         public void EatFinish()
